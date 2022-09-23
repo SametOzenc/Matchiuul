@@ -93,3 +93,4 @@ widgetsnbextension==3.5.1
 yarg==0.1.9
 joblib
 catboost
+sklearn
