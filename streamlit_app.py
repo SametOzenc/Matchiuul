@@ -18,7 +18,7 @@ st.set_page_config(
     layout="wide",
     initial_sidebar_state="expanded",
 )
-image = Image.open(r'C:\Users\Sam\PycharmProjects\VBO\Final_projesi\logo.jpg')
+image = Image.open('logo.jpg')
 
 st.title("❤️SOUL MATE RECOMMENDATION ENGINE ")
 
@@ -147,10 +147,10 @@ pd.set_option('display.max_columns', None)
 pd.set_option('display.width', 250)
 pd.set_option('display.max_rows', 10)
 
-df_supervised = pd.read_csv(r"C:\Users\Sam\PycharmProjects\VBO\Final_projesi\Tf-idf_ready\5_cluster_df_final.csv")
+df_supervised = pd.read_csv("5_cluster_df_final.csv")
 df_supervised.drop(["Unnamed: 0"], axis=1, inplace=True)
 
-machine_learning_model = joblib.load(r'C:\Users\Sam\PycharmProjects\VBO\Final_projesi\Tf-idf_ready\best_model.pkl')
+machine_learning_model = joblib.load('best_model.pkl')
 
 # Burası streamlit tarafından yeni kullanıcı olarak gelecek
 
@@ -213,5 +213,3 @@ final_df = filtered_df[(filtered_df["age"] > age_filter[0]) & (filtered_df["age"
 
 st.dataframe(final_df)
 st.write(final_df.shape)
-
-%conda env export > environment.yaml
