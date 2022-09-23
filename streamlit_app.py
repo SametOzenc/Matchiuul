@@ -49,28 +49,28 @@ col1, col2, col3 = st.columns(3)
 with col1:
     st.expander("Gender")
     gender = ["Male", "Female"]
-    user_gender = st.selectbox("Select your gender?", gender)
+    user_gender = st.selectbox("Select your gender?", gender, key = 1)
 with col2:
     st.expander("Status")
     status = ['Single', 'Available', 'Seeing someone', 'Married']
-    user_status = st.selectbox("Select your status", status)
+    user_status = st.selectbox("Select your status", status, key = 2)
 
 col1, col2, col3 = st.columns(3)
 with col1:
     st.expander("Body Type")
     body_type = ['Average', 'Fit', 'Athletic', 'Thin', 'Curvy', 'A little extra', 'Skinny', 'Full figured', 'Overweight',
                     'Jacked', 'Used up', 'Rather not say']
-    user_body_type = st.selectbox("Select your body type", body_type)
+    user_body_type = st.selectbox("Select your body type", body_type, key = 3)
 with col2:
     st.expander("Drinks")
     drinks = ['Not at all', 'Rarely', 'Socially', 'Often', 'Very often', 'Desperately']
-    user_drink = st.selectbox("Select your drinking habit", drinks)
+    user_drink = st.selectbox("Select your drinking habit", drinks, key = 4)
 
 col1, col2, col3 = st.columns(3)
 with col1:
     st.expander("Pets")
-    education = ['Likes Boths', 'Only Cat', 'Only Dog', "Don't Like it"]
-    user_pets = st.selectbox("Select your pets preference", education)
+    pets = ['Likes Boths', 'Only Cat', 'Only Dog', "Don't Like it"]
+    user_pets = st.selectbox("Select your pets preference", pets, key = 5)
 with col2:
     user_height = st.number_input("Enter your height in cm:")
 
@@ -78,54 +78,54 @@ col1, col2, col3 = st.columns(3)
 with col1:
     st.expander("Job")
     job = ["Student", "Active working", "Retired"]
-    user_job = st.selectbox("Select your job status", job)
+    user_job = st.selectbox("Select your job status", job, key = 6)
 with col2:
     st.expander("Education")
     education = ["Postgraduate degree", "Graduate Degree", "High School", "Dropped out of High School"]
-    user_education = st.selectbox("Select your education level", education)
+    user_education = st.selectbox("Select your education level", education, key = 7)
 
 col1, col2, col3 = st.columns(3)
 with col1:
     st.expander("Religion")
     religion = ['Agnosticism', 'Atheism', 'Christianity', 'Catholicism', 'Other',
        'Buddhism', 'Judaism', 'Islam']
-    user_religion = st.selectbox("Select your religion", religion)
+    user_religion = st.selectbox("Select your religion", religion, key = 8)
 with col2:
     st.expander("New_sign")
     new_sign = ['Gemini', 'Cancer', 'Taurus', 'Sagittarius', 'Leo', 'Aquarius',
        'Libra', 'Pisces', 'Scorpio', 'Aries', 'Capricorn', 'Virgo']
-    user_sign = st.selectbox("Select your new_sign", new_sign)
+    user_sign = st.selectbox("Select your new_sign", new_sign, key = 9)
 
 col1, col2, col3 = st.columns(3)
 with col1:
     st.expander("Smokes")
     smokes = ["Yes", "No"]
-    user_smoke = st.selectbox("Select your smoking habit", smokes)
+    user_smoke = st.selectbox("Select your smoking habit", smokes, key = 10)
 
 col1, col2, col3 = st.columns(3)
 with col1:
     st.write("Select your favorite 3 Books")
     with st.expander("Choose 3 Books", expanded=False):
         books = ["Harry Potter", "Lord of the Rings", "Dune"]
-        chooser1 = st.selectbox("Book Name ", books, index=0, key=1)
-        chooser2 = st.selectbox("Book Name", books, index=1, key=2)
-        chooser3 = st.selectbox("Book Name ", books, index=2, key=3)
+        chooser1 = st.selectbox("Book Name ", books, index=0, key=11)
+        chooser2 = st.selectbox("Book Name", books, index=1, key=12)
+        chooser3 = st.selectbox("Book Name ", books, index=2, key=13)
 with col2:
     st.write("Select your favorite 3 Movies")
     with st.expander("Choose 3 Movies", expanded=False):
         books = ["Esaretin Bedeli", "Matrix", "Batman"]
-        chooser1 = st.selectbox("Movie Name ", books, index=0, key=1)
-        chooser2 = st.selectbox("Movie Name ", books, index=1, key=2)
-        chooser3 = st.selectbox("Movie Name ", books, index=2, key=3)
+        chooser1 = st.selectbox("Movie Name ", books, index=0, key=14)
+        chooser2 = st.selectbox("Movie Name ", books, index=1, key=15)
+        chooser3 = st.selectbox("Movie Name ", books, index=2, key=16)
 
 col1, col2, col3 = st.columns(3)
 with col1:
     st.write("Select your favorite 3 Music")
     with st.expander("Choose 3 Songs", expanded=False):
         books = ["Kuzu Kuzu", "Dudu", "Öp"]
-        chooser1 = st.selectbox("Song Name ", books, index=0, key=1)
-        chooser2 = st.selectbox("Song Name ", books, index=1, key=2)
-        chooser3 = st.selectbox("Song Name ", books, index=2, key=3)
+        chooser1 = st.selectbox("Song Name ", books, index=0, key=17)
+        chooser2 = st.selectbox("Song Name ", books, index=1, key=18)
+        chooser3 = st.selectbox("Song Name ", books, index=2, key=19)
 
 # filter your match
 col1, col2, col3 = st.columns(3)
@@ -134,9 +134,9 @@ with col1:
     with st.expander("Filter", expanded=False):
         age_filter =  st.slider("Age", 18, 99, (18, 99))
         height_filter = st.slider("Height", 140, 210, (140, 210))
-        sex_filter = st.selectbox("Gender", gender )
-        education_filter = st.selectbox("Education", education)
-        religion_filter = st.selectbox("Religion", religion)
+        sex_filter = st.selectbox("Gender", gender, key = 20 )
+        education_filter = st.selectbox("Education", education, key = 21)
+        religion_filter = st.selectbox("Religion", religion, key = 22)
 
 
 # ---------------------------------------- Engine --------------------------------------------
