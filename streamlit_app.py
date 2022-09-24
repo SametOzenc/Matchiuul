@@ -214,7 +214,7 @@ final_df = filtered_df[(filtered_df["age"] > age_filter[0]) & (filtered_df["age"
                            (filtered_df["height"] < height_filter[1]) ].head(25)
 
 
-
+final_df.reset_index(drop=True, inplace=True)
 
 # ----------------------------- TF-IDF -----------------------------
 # Datasetlerin okutulması işlemi
@@ -231,19 +231,21 @@ final_df["Lyrics"] = final_df["status"]
 
 # Her bir değişkene rastgele olarak 3 ayrı kitap, film ve müziğin okulan data setlerine eklenmesi işlemi
 
+try:
+    for i in range(0, (max(final_df.index + 1))):
+        book_total_summary = [books_data.sample(1)["Summary"].values[0] + books_data.sample(1)["Summary"].values[0] +
+                              books_data.sample(1)["Summary"].values[0]]
+        final_df["Books"][i] = book_total_summary
 
-for i in range(0, (max(final_df.index + 1))):
-    book_total_summary = [books_data.sample(1)["Summary"].values[0] + books_data.sample(1)["Summary"].values[0] +
-                          books_data.sample(1)["Summary"].values[0]]
-    final_df["Books"][i] = book_total_summary
+        movie_frames = (movies_data.sample(1)["Summaries"].values[0] + movies_data.sample(1)["Summaries"].values[0] +
+                        movies_data.sample(1)["Summaries"].values[0])
+        final_df["Movies"][i] = movie_frames
 
-    movie_frames = (movies_data.sample(1)["Summaries"].values[0] + movies_data.sample(1)["Summaries"].values[0] +
-                    movies_data.sample(1)["Summaries"].values[0])
-    final_df["Movies"][i] = movie_frames
-
-    lyrics_frames = (lyrics_data.sample(1)["Lyrics"].values[0] + lyrics_data.sample(1)["Lyrics"].values[0] +
-                     lyrics_data.sample(1)["Lyrics"].values[0])
-    final_df["Lyrics"][i] = lyrics_frames
+        lyrics_frames = (lyrics_data.sample(1)["Lyrics"].values[0] + lyrics_data.sample(1)["Lyrics"].values[0] +
+                         lyrics_data.sample(1)["Lyrics"].values[0])
+        final_df["Lyrics"][i] = lyrics_frames
+except:
+    st.error("We couldn't find enough users", icon="🚨")
 
 # İndex sıralamasının bozulmasından ötürü yeniden sıralama yapılarak atılması işlemi
 
