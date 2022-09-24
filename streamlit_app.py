@@ -8,7 +8,9 @@ import pandas as pd
 import joblib
 from catboost import CatBoostClassifier
 
-
+books_data = pd.read_csv("Books.csv")
+movies_data = pd.read_csv("Movies.csv")
+lyrics_data = pd.read_csv("lyrics.csv")
 
 # ----------------------------- Streamlit -----------------------------
 
@@ -16,7 +18,7 @@ st.set_page_config(
     page_title="Matchiuul",
     page_icon="🤖",
     layout="wide",
-    initial_sidebar_state="expanded",
+    initial_sidebar_state="collapsed",
 )
 image = Image.open('logo.jpg')
 
@@ -106,26 +108,26 @@ col1, col2, col3 = st.columns(3)
 with col1:
     st.write("Select your favorite 3 Books")
     with st.expander("Choose 3 Books", expanded=False):
-        books = ["Harry Potter", "Lord of the Rings", "Dune"]
-        chooser1 = st.selectbox("Book Name ", books, index=0, key=11)
-        chooser2 = st.selectbox("Book Name", books, index=1, key=12)
-        chooser3 = st.selectbox("Book Name ", books, index=2, key=13)
+        books = books_data["Kitap_Adı"].unique().tolist()
+        books_chooser1 = st.selectbox("Book Name ", books, index=0)
+        books_chooser2 = st.selectbox("Book Name", books, index=1)
+        books_chooser3 = st.selectbox("Book Name ", books, index=2)
 with col2:
     st.write("Select your favorite 3 Movies")
     with st.expander("Choose 3 Movies", expanded=False):
-        books = ["Esaretin Bedeli", "Matrix", "Batman"]
-        chooser1 = st.selectbox("Movie Name ", books, index=0, key=14)
-        chooser2 = st.selectbox("Movie Name ", books, index=1, key=15)
-        chooser3 = st.selectbox("Movie Name ", books, index=2, key=16)
+        movies = movies_data["Movie_Name"].unique().tolist()
+        movies_chooser1 = st.selectbox("Movie Name ", movies, index=0)
+        movies_chooser2 = st.selectbox("Movie Name ", movies, index=1)
+        movies_chooser3 = st.selectbox("Movie Name ", movies, index=2)
 
 col1, col2, col3 = st.columns(3)
 with col1:
-    st.write("Select your favorite 3 Music")
+    st.write("Select your favorite 3 Songs")
     with st.expander("Choose 3 Songs", expanded=False):
-        books = ["Kuzu Kuzu", "Dudu", "Öp"]
-        chooser1 = st.selectbox("Song Name ", books, index=0, key=17)
-        chooser2 = st.selectbox("Song Name ", books, index=1, key=18)
-        chooser3 = st.selectbox("Song Name ", books, index=2, key=19)
+        songs = lyrics_data["Song"].unique().tolist()
+        songs_chooser1 = st.selectbox("Song Name ", songs, index=0)
+        songs_chooser2 = st.selectbox("Song Name ", songs, index=1)
+        songs_chooser3 = st.selectbox("Song Name ", songs, index=2)
 
 # filter your match
 col1, col2, col3 = st.columns(3)
@@ -136,7 +138,7 @@ with col1:
         height_filter = st.slider("Height", 140, 210, (140, 210))
         sex_filter = st.selectbox("Gender", gender, key = 20 )
         education_filter = st.selectbox("Education", education, key = 21)
-        religion_filter = st.selectbox("Religion", religion, key = 22)
+        
 
 
 # ---------------------------------------- Engine --------------------------------------------
@@ -208,8 +210,169 @@ education_filter.replace(" " , "_")
 
 final_df = filtered_df[(filtered_df["age"] > age_filter[0]) & (filtered_df["age"] < age_filter[1]) &
                            (filtered_df["sex"] == sex_filter) & (filtered_df["New_Education"] == education_filter.replace(" " , "_"))
-                       & (filtered_df["New_religion"] == religion_filter.lower()) & (filtered_df["height"] > height_filter[0]) &
+                       &   (filtered_df["height"] > height_filter[0]) &
                            (filtered_df["height"] < height_filter[1]) ]
 
 st.dataframe(final_df)
 st.write(final_df.shape)
+
+# ----------------------------- TF-IDF -----------------------------
+# Datasetlerin okutulması işlemi
+
+count_vect = CountVectorizer()
+vectorizer = TfidfVectorizer()
+
+
+# Kitap, film, müzik gibi değişkenlerin veri setine geçici olarak sadece statü olarak eklenmesi işlemi
+
+final_df["Books"] = final_df["status"]
+final_df["Movies"] = final_df["status"]
+final_df["Lyrics"] = final_df["status"]
+
+# Her bir değişkene rastgele olarak 3 ayrı kitap, film ve müziğin okulan data setlerine eklenmesi işlemi
+
+
+for i in range(0, (max(final_df.index + 1))):
+    book_total_summary = [books_data.sample(1)["Summary"].values[0] + books_data.sample(1)["Summary"].values[0] +
+                          books_data.sample(1)["Summary"].values[0]]
+    final_df["Books"][i] = book_total_summary
+
+    movie_frames = (movies_data.sample(1)["Summaries"].values[0] + movies_data.sample(1)["Summaries"].values[0] +
+                    movies_data.sample(1)["Summaries"].values[0])
+    final_df["Movies"][i] = movie_frames
+
+    lyrics_frames = (lyrics_data.sample(1)["Lyrics"].values[0] + lyrics_data.sample(1)["Lyrics"].values[0] +
+                     lyrics_data.sample(1)["Lyrics"].values[0])
+    final_df["Lyrics"][i] = lyrics_frames
+
+# İndex sıralamasının bozulmasından ötürü yeniden sıralama yapılarak atılması işlemi
+
+final_df = final_df.reset_index()
+
+# Örnek Kitap değişkenlerinin atanması işlemi
+
+book1 = books_chooser1
+book2 = books_chooser2
+book3 = books_chooser3
+
+# Kitap özetlerinin kitap adları değişkeninden seçilip özetlerinin değişkenlere kaydedilme işlemi
+
+book_Summary1 = books_data[books_data['Kitap_Adı'] == book1]["Summary"]
+book_Summary2 = books_data[books_data['Kitap_Adı'] == book2]["Summary"]
+book_Summary3 = books_data[books_data['Kitap_Adı'] == book3]["Summary"]
+
+# 3 kitabın bir değişken içinden girilmesi işlemi
+
+book_total_summary = (book_Summary1.values[0]+book_Summary2.values[0]+book_Summary3.values[0])
+
+# datasetine kitap benzerliği değişkenin eklenmesi işlemi
+
+final_df["Book_Similarity"] = final_df["status"]
+
+# Kitap değişkenin str olarak kaydedilmesi işlemi
+
+final_df["Books"] = final_df["Books"].astype("str")
+
+# Kitap benzerliklerinin dataset içinde bulunan karekterler ile seçilen kitaplar arasında cosine similarity bulunması işlemi
+
+for i in range(0,(max((final_df.index)+1))):
+    books = [final_df["Books"].loc[i],book_total_summary]
+    X_train_counts = count_vect.fit_transform(books)
+    pd.DataFrame(X_train_counts.toarray(), columns=count_vect.get_feature_names(), index=['The_Other_Book', 'Choosing_Book'])
+    trsfm = vectorizer.fit_transform(books)
+    pd.DataFrame(trsfm.toarray(), columns=vectorizer.get_feature_names(), index=['The_Other_Book', 'Choosing_Book'])
+    final_df["Book_Similarity"][i] = (cosine_similarity(trsfm[0:1], trsfm).tolist()[0][1])*1000
+
+# Film değişkenlerinin örnek olarak atama işlemi
+
+movies1 = movies_chooser1
+movies2 = movies_chooser2
+movies3 = movies_chooser3
+
+# Seçilen filmlerin ayrı ayrı bir değişkene özetlerinin ekleme işlemi
+
+movie_Summary1 = movies_data[movies_data['Movie_Name'] == movies1]["Summaries"]
+movie_Summary2 = movies_data[movies_data['Movie_Name'] == movies2]["Summaries"]
+movie_Summary3 = movies_data[movies_data['Movie_Name'] == movies3]["Summaries"]
+
+# 3 farklı film özetlerinin tek bir değişken adı altında toplanması işlemi
+
+movie_total_summary = (movie_Summary1.values[0]+movie_Summary2.values[0]+movie_Summary3.values[0])
+
+# Film benzerlik değişkeninin veri setine eklenme işlemi
+
+final_df["Movie_Similarity"] = final_df["status"]
+
+# Seçilen 3 filmin veri setindeki her bir kişi için ayrı ayrı cosine similarity'sinin bulunması işlemi
+
+for i in range(0,(max((final_df.index)+1))):
+    movies = [final_df["Movies"].loc[i],movie_total_summary]
+    X_train_counts = count_vect.fit_transform(movies)
+    pd.DataFrame(X_train_counts.toarray(), columns=count_vect.get_feature_names(), index=['The_Other_Movie','Choosing_Movie'])
+    trsfm = vectorizer.fit_transform(movies)
+    pd.DataFrame(trsfm.toarray(), columns=vectorizer.get_feature_names(), index=['The_Other_Movie','Choosing_Movie'])
+    final_df["Movie_Similarity"][i] = (cosine_similarity(trsfm[0:1], trsfm).tolist()[0][1])*1000
+
+# Her bir şarkının örnek olarak atama işlemi
+
+lyrics1 = songs_chooser1
+lyrics2 = songs_chooser2
+lyrics3 = songs_chooser3
+
+# Seçilen her bir şarkının için şarkı sözlerinin bulunup bir değişkene eklenme işlemi
+
+lyrics_Summary1 = lyrics_data[lyrics_data['Song'] == lyrics1]["Lyrics"]
+lyrics_Summary2 = lyrics_data[lyrics_data['Song'] == lyrics2]["Lyrics"]
+lyrics_Summary3 = lyrics_data[lyrics_data['Song'] == lyrics3]["Lyrics"]
+
+# Her bir şarkı sözünün bir değişkene birleştirme işlemi
+
+lyrics_total_summary = (lyrics_Summary1.values[0]+lyrics_Summary2.values[0]+lyrics_Summary3.values[0])
+
+# Şarkı sözlerinin benzerliklerini datasete eklenmesi işlemi
+
+final_df["Lyrics_Similarity"] = final_df["status"]
+
+# Seçilen her bir şarkının sözü dataseti içindeki her bir kişinin seçtiği şarkı sözü ile cosine similarity hesaplama işlemi
+
+for i in range(0,(max((final_df.index)+1))):
+    lyrics = [final_df["Lyrics"].loc[i],lyrics_total_summary]
+    X_train_counts = count_vect.fit_transform(lyrics)
+    pd.DataFrame(X_train_counts.toarray(), columns=count_vect.get_feature_names(), index=['The_Other_Movie', 'Choosing_Movie'])
+    trsfm = vectorizer.fit_transform(lyrics)
+    pd.DataFrame(trsfm.toarray(), columns=vectorizer.get_feature_names(), index=['The_Other_Movie', 'Choosing_Movie'])
+    final_df["Lyrics_Similarity"][i] = (cosine_similarity(trsfm[0:1], trsfm).tolist()[0][1])*1000
+
+# Scoring process
+
+# Toplam benzerlik değişkenin datasetine eklenme işlemi
+
+final_df["Total_Similarity"] = final_df["Book_Similarity"]
+
+# Her bir benzerliğin tek bir benzerlik ile belirli skorlar ile toplanıp toplam benzerlik değişkinin hesaplanma işlemi
+
+for i in range(0,(max((final_df.index)+1))):
+    final_df["Total_Similarity"][i] =  0.4*float(final_df["Book_Similarity"][i]) + 0.3 * float(final_df["Movie_Similarity"][i]) + 0.3 * float(final_df["Lyrics_Similarity"][i])
+
+
+# Sorting the best 5 choices for tf-idf according to books, movies, and songs
+
+# En iyi benzerlik oranına sahip 5 kişinin bulunması işlemi
+
+first_five_index = final_df["Total_Similarity"].sort_values(ascending=False).index.values[5]
+
+# Veri setinin bu 5 kişi ile filtrelenmesi işlemi
+
+tf_idf_final_df = final_df[(final_df["Total_Similarity"] > final_df["Total_Similarity"][first_five_index])]
+
+# Veri seti indexinin tekrardan yenilenmesi işlemi
+
+tf_idf_final_df = tf_idf_final_df.reset_index()
+
+# Sonradan eklenen değişkenlerin silinmesi işlemi
+
+tf_idf_final_df.drop(["Books","Movies","Lyrics","Book_Similarity","Movie_Similarity","Lyrics_Similarity","Total_Similarity","level_0","index","Cluster"], axis=1, inplace=True)
+
+
+st.dataframe(tf_idf_final_df)
+st.write(tf_idf_final_df.shape)
