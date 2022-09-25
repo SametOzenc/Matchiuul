@@ -189,8 +189,7 @@ sex_f = sex_filter
 education_filter.replace(" " , "_")
 
 final_df = filtered_df[(filtered_df["age"] > age_filter[0]) & (filtered_df["age"] < age_filter[1]) &
-                           (filtered_df["sex"] == sex_filter) & (filtered_df["New_Education"] == education_filter.replace(" " , "_"))
-                       &   (filtered_df["height"] > height_filter[0]) &
+                           (filtered_df["sex"] == sex_filter) &   (filtered_df["height"] > height_filter[0]) &
                            (filtered_df["height"] < height_filter[1]) ].head(25)
 
 
