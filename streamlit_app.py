@@ -148,11 +148,11 @@ new_profile["sex"] = user_gender
 new_profile["body_type"] = user_body_type.lower().replace(" ","_")
 new_profile["drinks"] = user_drink.lower()
 new_profile["height"] = int(user_height)
-new_profile["New_Pets"] = user_pets.replace(" " , "_")
-new_profile["New_Job"] = user_job.replace(" " , "_")
-new_profile["New_Education"] = user_education.replace(" " , "_")
+new_profile["New_Pets"] = "Likes_Boths"
+new_profile["New_Job"] = "Active_working"
+new_profile["New_Education"] = "Graduate_Degree"
 new_profile["New_religion"] = user_religion.lower()
-new_profile["New_sign"] = user_sign
+new_profile["New_sign"] = "Taurus"
 new_profile["New_smokes"] = user_smoke
 
 
