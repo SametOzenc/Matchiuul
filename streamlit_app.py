@@ -70,39 +70,19 @@ with col2:
 
 col1, col2, col3 = st.columns(3)
 with col1:
-    st.expander("Pets")
-    pets = ['Likes Boths', 'Only Cat', 'Only Dog', "Don't Like it"]
-    user_pets = st.selectbox("Select your pets preference", pets, key = 5)
-with col2:
     user_height = st.number_input("Enter your height in cm:")
-
-col1, col2, col3 = st.columns(3)
-with col1:
-    st.expander("Job")
-    job = ["Student", "Active working", "Retired"]
-    user_job = st.selectbox("Select your job status", job, key = 6)
 with col2:
-    st.expander("Education")
-    education = ["Postgraduate degree", "Graduate Degree", "High School", "Dropped out of High School"]
-    user_education = st.selectbox("Select your education level", education, key = 7)
-
-col1, col2, col3 = st.columns(3)
-with col1:
     st.expander("Religion")
     religion = ['Agnosticism', 'Atheism', 'Christianity', 'Catholicism', 'Other',
        'Buddhism', 'Judaism', 'Islam']
     user_religion = st.selectbox("Select your religion", religion, key = 8)
-with col2:
-    st.expander("New_sign")
-    new_sign = ['Gemini', 'Cancer', 'Taurus', 'Sagittarius', 'Leo', 'Aquarius',
-       'Libra', 'Pisces', 'Scorpio', 'Aries', 'Capricorn', 'Virgo']
-    user_sign = st.selectbox("Select your new_sign", new_sign, key = 9)
-
+    
 col1, col2, col3 = st.columns(3)
 with col1:
     st.expander("Smokes")
     smokes = ["Yes", "No"]
     user_smoke = st.selectbox("Select your smoking habit", smokes, key = 10)
+
 
 col1, col2, col3 = st.columns(3)
 with col1:
@@ -137,7 +117,7 @@ with col1:
         age_filter =  st.slider("Age", 18, 99, (18, 99))
         height_filter = st.slider("Height", 140, 210, (140, 210))
         sex_filter = st.selectbox("Gender", gender, key = 20 )
-        education_filter = st.selectbox("Education", education, key = 21)
+        
         
 
 
